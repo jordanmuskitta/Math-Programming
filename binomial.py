@@ -2,6 +2,7 @@ from typing import List, Optional
 from dataclasses import dataclass
 import numpy as np
 from math import factorial
+import matplotlib.pyplot as plt
 
 @dataclass
 class Binomial:
@@ -44,11 +45,39 @@ class Binomial:
         return self.results
 
     def plot_pmf(self):
-        pass
+        res_list = self.results.values()
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+        
+        # PMF plot
+        ax1.hist(res_list, bins=range(self.n + 2), density=True, 
+                alpha=0.7, color='blue', edgecolor='black', rwidth=0.8)
+        ax1.set_title('PMF')
+        ax1.set_xlabel('Number of Successes')
+        ax1.set_ylabel('Probability')
+
+        # CDF plot
+        ax2.hist(res_list, bins=range(self.n + 2), density=True, 
+                cumulative=True, alpha=0.7, color='green', 
+                edgecolor='black', rwidth=0.8)
+        ax2.set_title('CDF')
+        ax2.set_xlabel('Number of Successes')
+        ax2.set_ylabel('Cumulative Probability')
+
+
+        plt.tight_layout()
+        plt.show()        
 
 if __name__ == "__main__":
-    bin = Binomial(100, 0.5, 100)
-    print(bin.simulate_dist())
+    
+    # Initialise object
+    bin = Binomial(100, 0.5, 1000)
+
+    # Print the theorectical expected value and variance
+    print(f"The expected value: {bin.calc_ev()}")
+    print(f"The variance: {bin.calc_var()}")
+    
+    bin.simulate_dist()
+    bin.plot_pmf()
 
 
     
